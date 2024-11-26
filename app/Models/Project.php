@@ -15,4 +15,14 @@ class Project extends Model
         // has many children in tasks table
         return $this->hasMany(Task::class);
     }
+
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function updatedBy()
+    {
+        return $this->belongsTo(User::class, 'updated_by');
+    }
 }
