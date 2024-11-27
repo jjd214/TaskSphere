@@ -1,10 +1,28 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head, usePage, Link } from '@inertiajs/react';
+import { Head, usePage, Link, router } from '@inertiajs/react';
 import Pagination from '@/Components/Pagination';
 import { PROJECT_STATUS_TEXT_MAP, PROJECT_STATUS_CLASS_MAP } from '@/constants'
+import TextInput from '@/Components/TextInput';
+import SelectInput from '@/Components/SelectInput';
 
-export default function Index({ projects }) {
+export default function Index({ projects, queryParams = null }) {
     const user = usePage().props.auth.user;
+
+    queryParams = queryParams || {}
+    const searchFieldChanged = (name, value) => {
+        if(value) {
+            queryParams[name] = value;
+        } else {
+            delete queryParams[name]
+        }
+
+        router.get(route('project.index'), queryParams);
+    }
+
+    // const onKeyPress = (name, e) => {
+    //     if(e.key === 'Enter') return;
+    //     searchFieldChanged(name, e.target.value);
+    // }
 
     return (
         <AuthenticatedLayout
@@ -21,6 +39,30 @@ export default function Index({ projects }) {
                     <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                         <div className="p-6 text-gray-900">
                             Welcome, {user.name}!
+                        </div>
+                        <div className="px-6 pb-6">
+                            <TextInput
+                                type='text'
+                                placeholder='Project Name'
+                                className='mr-4'
+                                defaultValue={queryParams.name}
+                                onBlur={e => searchFieldChanged('name', e.target.value)}
+                                // onKeyPress={e => onKeyPress('name', e)}
+                                onKeyPress={(e) => {
+                                    if (e.key === 'Enter') {
+                                        searchFieldChanged('name', e.target.value);
+                                    }
+                                }}
+                            />
+                            <SelectInput
+                                onChange={e => searchFieldChanged('status', e.target.value)}
+                                defaultValue={queryParams.status}
+                            >
+                                <option value="">Select status</option>
+                                <option value="pending">Pending</option>
+                                <option value="in_progress">In Progress</option>
+                                <option value="completed">Completed</option>
+                            </SelectInput>
                         </div>
                         <div className='px-6 pb-6'>
                             <table className='w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400'>
