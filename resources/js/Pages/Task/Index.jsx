@@ -1,6 +1,7 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head, usePage } from "@inertiajs/react";
-import { TASK_PRIORITY_CLASS_MAP, TASK_STATUS_CLASS_MAP, TASK_STATUS_TEXT_MAP } from "@/constants";
+import { Head, usePage, Link } from "@inertiajs/react";
+import Pagination from "@/Components/Pagination";
+import { TASK_PRIORITY_CLASS_MAP, TASK_STATUS_CLASS_MAP, TASK_STATUS_TEXT_MAP, TASK_PRIORITY_TEXT_MAP } from "@/constants";
 
 export default function Index({tasks}) {
     const user = usePage().props.auth.user;
@@ -22,16 +23,17 @@ export default function Index({tasks}) {
                             Welcome, {user.name}!
                         </div>
                         <div className="p-6 text-gray-900">
-                            <pre className="whitespace-pre-wrap">
+                            {/* <pre className="whitespace-pre-wrap">
                                 {JSON.stringify(tasks, null, 2)}
-                            </pre>
+                            </pre> */}
                             <div className='px-6 pb-6'>
-                            {/* <table className='w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400'>
+                            <table className='w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400'>
                                 <thead className='text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500'>
                                     <tr className='text-nowrap'>
                                         <th className='px-3 py-3'>#</th>
                                         <th className='px-3 py-3'>Image</th>
                                         <th className='px-3 py-3'>Name</th>
+                                        <th className='px-3 py-3'>Priority</th>
                                         <th className='px-3 py-3'>Status</th>
                                         <th className='px-3 py-3'>Created Date</th>
                                         <th className='px-3 py-3'>Due Date</th>
@@ -48,11 +50,14 @@ export default function Index({tasks}) {
                                         </td>
                                         <td className='px-3 py-2'>{task.name}</td>
                                         <td className='px-3 py-2'>
+                                            <span className={'px-2 py-1 rounded text-white ' + TASK_PRIORITY_CLASS_MAP[task.priority]}>{TASK_PRIORITY_TEXT_MAP[task.priority]}</span>
+                                        </td>
+                                        <td className='px-3 py-2'>
                                             <span className={'px-2 py-1 rounded text-white ' + TASK_STATUS_CLASS_MAP[task.status]}>{TASK_STATUS_TEXT_MAP[task.status]}</span>
                                         </td>
                                         <td className='px-3 py-2'>{task.created_at}</td>
                                         <td className='px-3 py-2'>{task.due_date}</td>
-                                        <td className='px-3 py-2'>{task.createdBy['name']}</td>
+                                        <td className='px-3 py-2'>{task.createdBy.name}</td>
                                         <td className='px-3 py-2 text-center'>
                                             <Link
                                                 className='font-medium text-blue-500 dark:text-blue-400 hover:underline mx-1'
@@ -69,7 +74,7 @@ export default function Index({tasks}) {
                                 ))}
                                 </tbody>
                             </table>
-                            <Pagination links={task.meta.links} /> */}
+                            <Pagination links={tasks.meta.links} />
                         </div>
                         </div>
                     </div>
